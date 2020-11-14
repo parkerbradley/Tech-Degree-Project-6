@@ -1,8 +1,11 @@
 //variable declarations
 const overlay = document.getElementById('overlay');
+const title = document.querySelector('.title');
 const resetBtn = document.querySelector('.btn__reset');
 const phrase = document.getElementById('phrase');
+const letters = document.getElementsByClassName('letter');
 const qwerty = document.getElementById('qwerty');
+const keys = document.querySelector('.keyrow button');
 
 const phrases = [
   "throw caution to the wind",
@@ -41,9 +44,7 @@ function addPhraseToDisplay(arr) {
 
 const phraseArray = getRandomPhraseAsArray(phrases);
 addPhraseToDisplay(phraseArray);
-
 function checkLetter(button) {
-  const letters = document.getElementsByClassName('letter');
   var found = null;
   for(let i = 0; i < letters.length; i++) {
     if (letters[i].textContent === button) {
@@ -52,6 +53,20 @@ function checkLetter(button) {
       var found = button;
     }
   }
+  return found;
+}
+
+function reset() {
+  for (let i = 0; i < letters.length; i++) {
+    letters[i].className = 'letter';
+  }
+  for (let i =0; i < keys.length; i++) {
+    keys[i].setAttribute('disabled', 'false');
+  }
+  for (let i = 0; i < li.length; i++) {
+    ul.removeChild(li[i]);
+  }
+  addPhraseToDisplay(phraseArray);
 }
 
 qwerty.addEventListener('click', (e) => {
@@ -59,5 +74,18 @@ qwerty.addEventListener('click', (e) => {
   letterPicked.className = 'chosen';
   letterPicked.setAttribute('disabled', 'true');
   let letterFound = checkLetter(letterPicked.textContent);
-  console.log(letterPicked.textContent + 'event handler');
+  if (letterFound === null) {
+    missed++;
+  }
+  if (document.getElementsByClassName('show').length === document.getElementsByClassName('letter').length) {
+    overlay.className = 'win';
+    title.textContent = 'You Won!';
+    resetBtn.textContent = 'Play Again?';
+    overlay.style.display = '';
+  } else if (missed === 5) {
+    overlay.className = 'lose';
+    title.textContent = 'You Lost';
+    resetBtn.textContent = 'Play Again?';
+    overlay.style.display = '';
+  }
 });
