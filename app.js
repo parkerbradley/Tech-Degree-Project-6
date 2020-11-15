@@ -3,9 +3,11 @@ const overlay = document.getElementById('overlay');
 const title = document.querySelector('.title');
 const resetBtn = document.querySelector('.btn__reset');
 const phrase = document.getElementById('phrase');
+let ul = document.querySelector('#phrase ul');
+const LIs = ul.childNodes;
 const letters = document.getElementsByClassName('letter');
 const qwerty = document.getElementById('qwerty');
-const keys = document.querySelector('.keyrow button');
+const keys = document.querySelectorAll('.keyrow button');
 
 const phrases = [
   "throw caution to the wind",
@@ -16,11 +18,16 @@ const phrases = [
 ]
 
 //declare game score variables
-let missed = 0;
+var missed = 0;
 
 //hide start game overlay when "start" button is clicked
 resetBtn.addEventListener('click', (e) => {
   overlay.style.display = 'none';
+  if (document.getElementById('overlay').className === 'start') {
+    return;
+  } else {
+    reset();
+  }
 });
 
 function getRandomPhraseAsArray(arr){
@@ -37,13 +44,13 @@ function addPhraseToDisplay(arr) {
     } else {
       li.className = 'letter';
     }
-    let ul = document.querySelector('#phrase ul');
     ul.appendChild(li);
   }
 }
 
-const phraseArray = getRandomPhraseAsArray(phrases);
+var phraseArray = getRandomPhraseAsArray(phrases);
 addPhraseToDisplay(phraseArray);
+
 function checkLetter(button) {
   var found = null;
   for(let i = 0; i < letters.length; i++) {
@@ -54,19 +61,6 @@ function checkLetter(button) {
     }
   }
   return found;
-}
-
-function reset() {
-  for (let i = 0; i < letters.length; i++) {
-    letters[i].className = 'letter';
-  }
-  for (let i =0; i < keys.length; i++) {
-    keys[i].setAttribute('disabled', 'false');
-  }
-  for (let i = 0; i < li.length; i++) {
-    ul.removeChild(li[i]);
-  }
-  addPhraseToDisplay(phraseArray);
 }
 
 qwerty.addEventListener('click', (e) => {
@@ -89,3 +83,17 @@ qwerty.addEventListener('click', (e) => {
     overlay.style.display = '';
   }
 });
+
+function reset() {
+  for (let i = 0; i < letters.length; i++) {
+    letters[i].className = 'letter';
+  }
+  for (let i =0; i < keys.length; i++) {
+    keys[i].removeAttribute('disabled');
+    keys[i].className = '';
+  }
+  missed = 0;
+  ul.innerHTML = '';
+  var phraseArray = getRandomPhraseAsArray(phrases);
+  addPhraseToDisplay(phraseArray);
+}
