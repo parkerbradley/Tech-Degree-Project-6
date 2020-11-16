@@ -11,6 +11,7 @@ const keys = document.querySelectorAll('.keyrow button');
 const ol = document.querySelector('ol');
 const tries = document.querySelectorAll('.tries');
 
+//random phrases array
 const phrases = [
   "throw caution to the wind",
   "a dime a dozen",
@@ -25,6 +26,7 @@ var missed = 0;
 //hide start game overlay when "start" button is clicked
 resetBtn.addEventListener('click', (e) => {
   overlay.style.display = 'none';
+  //runs the reset function only if the overlay class is won or lost. If it is the start overlay the event listener ends
   if (document.getElementById('overlay').className === 'start') {
     return;
   } else {
@@ -32,11 +34,13 @@ resetBtn.addEventListener('click', (e) => {
   }
 });
 
+//gets a random phrase from the phrases array and splits the array into an array of characters
 function getRandomPhraseAsArray(arr){
     let phraseChar = arr[Math.floor(Math.random() * arr.length)].split('');
     return phraseChar;
 }
 
+//takes the random array of characters and places each character in an <li>. <li> that are not empty spaces are assigned an class of "letter"
 function addPhraseToDisplay(arr) {
   for (let i = 0; i < arr.length; i++) {
     let li = document.createElement('li');
@@ -50,9 +54,11 @@ function addPhraseToDisplay(arr) {
   }
 }
 
+//prints the random phrase to the screen
 var phraseArray = getRandomPhraseAsArray(phrases);
 addPhraseToDisplay(phraseArray);
 
+//compares the key selected to the letters in the phrase. Displays the letter in the phrase if there is a match
 function checkLetter(button) {
   var found = null;
   for(let i = 0; i < letters.length; i++) {
@@ -65,20 +71,27 @@ function checkLetter(button) {
   return found;
 }
 
+//event listener for the keyboard
 qwerty.addEventListener('click', (e) => {
-  const letterPicked = event.target;
-  letterPicked.className = 'chosen';
-  letterPicked.setAttribute('disabled', 'true');
-  let letterFound = checkLetter(letterPicked.textContent);
-  if (letterFound === null) {
-    missed++;
-    ol.removeChild(ol.firstElementChild);
+  if (e.target.tagName === 'BUTTON') {
+    const letterPicked = event.target;
+    letterPicked.className = 'chosen';
+    letterPicked.setAttribute('disabled', 'true');
+    let letterFound = checkLetter(letterPicked.textContent);
+    //if the letter selected is not in the phrase, adds 1 to the missed score and removes a heart from the lives display
+    if (letterFound === null) {
+      missed++;
+      ol.removeChild(ol.firstElementChild);
+    }
   }
+  //watches for game status
+  //if all letters are selected the game is won and overlay is edited
   if (document.getElementsByClassName('show').length === document.getElementsByClassName('letter').length) {
     overlay.className = 'win';
     title.textContent = 'You Won!';
     resetBtn.textContent = 'Play Again?';
     overlay.style.display = '';
+  //if missed = 5, the game is lost and overlay is edited for a lost game
   } else if (missed === 5) {
     overlay.className = 'lose';
     title.textContent = 'You Lost';
@@ -87,6 +100,7 @@ qwerty.addEventListener('click', (e) => {
   }
 });
 
+//resets the game screen and displays a new random phrase from the won or lost overlay
 function reset() {
   for (let i = 0; i < letters.length; i++) {
     letters[i].className = 'letter';
