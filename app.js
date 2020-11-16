@@ -8,6 +8,8 @@ const LIs = ul.childNodes;
 const letters = document.getElementsByClassName('letter');
 const qwerty = document.getElementById('qwerty');
 const keys = document.querySelectorAll('.keyrow button');
+const ol = document.querySelector('ol');
+const tries = document.querySelectorAll('.tries');
 
 const phrases = [
   "throw caution to the wind",
@@ -56,7 +58,7 @@ function checkLetter(button) {
   for(let i = 0; i < letters.length; i++) {
     if (letters[i].textContent === button) {
       letters[i].className +=' ' + 'show';
-      //let pickedLetters = letters[i];
+      letters[i].style.transition = 'ease-in 1s';
       var found = button;
     }
   }
@@ -70,6 +72,7 @@ qwerty.addEventListener('click', (e) => {
   let letterFound = checkLetter(letterPicked.textContent);
   if (letterFound === null) {
     missed++;
+    ol.removeChild(ol.firstElementChild);
   }
   if (document.getElementsByClassName('show').length === document.getElementsByClassName('letter').length) {
     overlay.className = 'win';
@@ -91,6 +94,10 @@ function reset() {
   for (let i =0; i < keys.length; i++) {
     keys[i].removeAttribute('disabled');
     keys[i].className = '';
+  }
+  for (let i = 0; i < 4; i++) {
+    tries[i].innerHTML = '<img src="images/liveHeart.png" height="35px" width="30px">';
+    tries[i].className = 'tries';
   }
   missed = 0;
   ul.innerHTML = '';
