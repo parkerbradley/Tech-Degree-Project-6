@@ -79,7 +79,7 @@ qwerty.addEventListener('click', (e) => {
     letterPicked.setAttribute('disabled', 'true');
     let letterFound = checkLetter(letterPicked.textContent);
     //if the letter selected is not in the phrase, adds 1 to the missed score and removes a heart from the lives display
-    if (letterFound === null) {
+    if (letterFound === null && missed < 5) {
       missed++;
       ol.removeChild(ol.firstElementChild);
     }
@@ -109,10 +109,8 @@ function reset() {
     keys[i].removeAttribute('disabled');
     keys[i].className = '';
   }
-  for (let i = 0; i < 4; i++) {
-    tries[i].innerHTML = '<img src="images/liveHeart.png" height="35px" width="30px">';
-    tries[i].className = 'tries';
-  }
+  ol.innerHTML = '';
+  ol.innerHTML = '<li class="tries left"><img src="images/liveHeart.png" height="35px" width="30px"></li><li class="tries left"><img src="images/liveHeart.png" height="35px" width="30px"></li><li class="tries left"><img src="images/liveHeart.png" height="35px" width="30px"></li><li class="tries left"><img src="images/liveHeart.png" height="35px" width="30px"></li><li class="tries left"><img src="images/liveHeart.png" height="35px" width="30px"></li>';
   missed = 0;
   ul.innerHTML = '';
   var phraseArray = getRandomPhraseAsArray(phrases);
